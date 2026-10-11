@@ -1,4 +1,4 @@
-@echo off
+﻿@echo off
 chcp 65001 >nul
 echo ==============================================
 echo  AI 英语作文阅卷助手 - 安装到新电脑（Windows）
