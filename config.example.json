@@ -1,0 +1,34 @@
+{
+  "_说明": "复制本文件为 config.local.json 后可覆盖默认配置（默认已内置好分数阅卷页规则）。config.local.json 已被 git 忽略，不会上传。",
+  "platform": {
+    "adapter": "generic",
+    "urlPatterns": ["yue\\.haofenshu\\.com.*mark"],
+    "scoreRange": { "min": 0, "max": 15 },
+    "selectors": {
+      "essayImage": [".subjectmark_content_svg svg"],
+      "scorePanel": [],
+      "scoreButtonContainer": [],
+      "confirmButton": [],
+      "submitButton": [],
+      "autoSubmitToggle": [],
+      "questionNumber": [],
+      "studentIdentity": [],
+      "currentScore": []
+    },
+    "confirmTexts": ["确 定", "确定", "✓"],
+    "submitTexts": ["提交"],
+    "autoSubmitTexts": ["自动提交"],
+    "totalStudents": 0,
+    "nextEssayTimeoutMs": 120000
+  },
+  "safety": {
+    "dryRun": true,
+    "phase": 1,
+    "minConfidenceAuto": 0.9,
+    "minConfidenceTeacherConfirm": 0.75,
+    "maxModelDisagreement": 3,
+    "allowSubmit": false,
+    "allowAutoSubmit": false,
+    "expectedQuestionNumber": null
+  }
+}

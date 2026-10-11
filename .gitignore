@@ -1,0 +1,13 @@
+node_modules/
+dist/
+logs/
+artifacts/
+chrome-profile/
+config.local.json
+.env
+.DS_Store
+*.log
+.npm-cache-local/
+data/
+build/
+/启动阅卷助手.command

@@ -1,0 +1,38 @@
+{
+  "name": "essay-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "高中英语作文 AI 自动阅卷浏览器 Agent —— 接管教师已登录的阅卷平台页面，AI 识别手写作文并按评分标准评分；DRY RUN 优先，安全闸门默认全关。",
+  "engines": {
+    "node": ">=20.12"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "npm run build && node dist/src/cli/cli.js start",
+    "init": "npm run build && node dist/src/cli/cli.js init",
+    "check": "npm run build && node dist/src/cli/cli.js check",
+    "analyze": "npm run build && node dist/src/cli/cli.js analyze",
+    "demo": "npm run build && node dist/scripts/demo-fixture.js",
+    "probe": "npm run build && node dist/scripts/probe-page.js",
+    "dev": "tsc -p tsconfig.json --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "jsonrepair": "^3.15.0",
+    "playwright-core": "^1.49.1",
+    "sharp": "^0.33.5",
+    "tesseract.js": "^5.1.1",
+    "ws": "^8.18.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "@types/ws": "^8.5.13",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

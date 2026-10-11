@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>模拟阅卷平台 · 2026届高三英语 · 作文题 66</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 14px/1.6 system-ui, "PingFang SC", "Microsoft YaHei", sans-serif; background: #f1f5f9; }
+  header { padding: 10px 20px; background: #1e293b; color: #e2e8f0; font-size: 15px; }
+  .layout { display: flex; gap: 16px; padding: 16px; align-items: flex-start; }
+  main.essay-area { flex: 1 1 62%; background: #fff; border-radius: 10px; padding: 14px; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+  .student-info { font-size: 13px; color: #475569; margin-bottom: 8px; }
+  .question { font-weight: 600; margin-bottom: 8px; }
+  #essay-canvas { width: 100%; height: auto; display: block; border: 1px solid #e2e8f0; border-radius: 6px; }
+  aside.score-panel { flex: 0 0 300px; background: #fff; border-radius: 10px; padding: 14px; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+  .panel-title { font-weight: 600; margin-bottom: 10px; }
+  .score-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
+  .score-btn { padding: 8px 0; font-size: 15px; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; cursor: pointer; }
+  .score-btn:hover { background: #eff6ff; }
+  .score-btn.selected { background: #2563eb; color: #fff; border-color: #2563eb; }
+  .confirm-row { margin-bottom: 12px; }
+  #confirm-btn { width: 100%; padding: 8px 0; font-size: 18px; border: 1px solid #22c55e; border-radius: 8px; background: #f0fdf4; color: #166534; cursor: pointer; }
+  .submit-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  #submit-btn { padding: 8px 24px; font-size: 15px; border: none; border-radius: 8px; background: #dc2626; color: #fff; cursor: pointer; }
+  #current-score-display { font-size: 13px; color: #475569; }
+  #confirm-display { font-size: 13px; color: #166534; min-height: 20px; }
+  .next-row { padding: 0 16px 24px; }
+  #next-btn { padding: 8px 20px; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; cursor: pointer; }
+</style>
+</head>
+<body>
+<header>模拟阅卷平台 · 2026 届高三英语 · 主观题网上阅卷</header>
+<div class="header-line" style="padding:6px 20px;background:#fff;border-bottom:1px solid #e2e8f0;font-size:13px;color:#334155">
+  <span>高三英语</span> <span>题块2</span> <span>五.66</span> <span>进度：1/2</span>
+</div>
+<div class="layout">
+  <main class="essay-area">
+    <div class="student-info" id="student-info">考生：王小明　考号：20260001</div>
+    <div class="question">66. 书面表达（满分 15 分）</div>
+    <canvas id="essay-canvas" width="1200" height="860"></canvas>
+  </main>
+  <aside class="score-panel">
+    <div class="panel-title">评分区 · 作文题 66（0-15 分）</div>
+    <div class="score-grid" id="score-grid">
+      <button class="score-btn" data-score="0">0</button>
+      <button class="score-btn" data-score="1">1</button>
+      <button class="score-btn" data-score="2">2</button>
+      <button class="score-btn" data-score="3">3</button>
+      <button class="score-btn" data-score="4">4</button>
+      <button class="score-btn" data-score="5">5</button>
+      <button class="score-btn" data-score="6">6</button>
+      <button class="score-btn" data-score="7">7</button>
+      <button class="score-btn" data-score="8">8</button>
+      <button class="score-btn" data-score="9">9</button>
+      <button class="score-btn" data-score="10">10</button>
+      <button class="score-btn" data-score="11">11</button>
+      <button class="score-btn" data-score="12">12</button>
+      <button class="score-btn" data-score="13">13</button>
+      <button class="score-btn" data-score="14">14</button>
+      <button class="score-btn" data-score="15">15</button>
+    </div>
+    <div class="confirm-row"><button id="confirm-btn">✓</button></div>
+    <div class="submit-row">
+      <label><input type="checkbox" id="auto-submit"> 自动提交</label>
+      <button id="submit-btn">提交</button>
+    </div>
+    <div id="current-score-display">当前分数：未评分</div>
+    <div id="confirm-display"></div>
+  </aside>
+</div>
+<div class="next-row"><button id="next-btn">下一份作文（模拟切换学生）</button></div>
+<script>
+  const ESSAYS = [
+    "Dear Peter,\n\nI'm glad to hear that you are interested in traditional Chinese festivals. Let me introduce the Mid-Autumn Festival to you.\n\nThe Mid-Autumn Festival falls on the 15th day of the eighth lunar month. On that day, family members get together and enjoy a big dinner. After dinner, we usually sit in the yard, eating mooncakes and admiring the full moon. Mooncakes are round, which stands for reunion and happiness.\n\nBesides, people often tell the story of Chang'e to children. It is one of the most beautiful legends in China.\n\nI hope you can come to China and celebrate the festival with us one day.\n\nYours,\nLi Hua",
+    "Dear Tom,\n\nI am writing to tell you about my plan for the coming summer holiday.\n\nFirst, I will take part in a volunteer programme in the local library. I can help children read English books and I believe it will be a meaningful experience.\n\nSecond, I plan to improve my spoken English by talking with my classmates online every evening. Practice makes perfect.\n\nFinally, I will go camping with my family for a week. It will help me relax and get close to nature.\n\nI am sure it will be a wonderful holiday. What about your plan?\n\nBest wishes,\nLi Ming"
+  ];
+  const STUDENTS = [
+    { name: '王小明', id: '20260001' },
+    { name: '李小红', id: '20260002' },
+    { name: '张伟', id: '20260003' },
+  ];
+  let studentIdx = 0;
+  let essayIdx = 0;
+
+  function drawEssay(text) {
+    const canvas = document.getElementById('essay-canvas');
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // 横线格
+    ctx.strokeStyle = '#dbeafe';
+    ctx.lineWidth = 1;
+    for (let y = 60; y < canvas.height; y += 42) {
+      ctx.beginPath(); ctx.moveTo(20, y); ctx.lineTo(canvas.width - 20, y); ctx.stroke();
+    }
+    // 手写风字体（优先 cursive 字体，回退到衬线）
+    ctx.fillStyle = '#1e293b';
+    ctx.font = '30px "Segoe Script", "Comic Sans MS", "Bradley Hand", cursive, serif';
+    const lines = text.split('\n');
+    lines.forEach((line, i) => {
+      ctx.fillText(line, 30, 52 + i * 42);
+    });
+  }
+
+  function renderStudent() {
+    const s = STUDENTS[studentIdx % STUDENTS.length];
+    const e = ESSAYS[essayIdx % ESSAYS.length];
+    document.getElementById('student-info').textContent = '考生：' + s.name + '　考号：' + s.id;
+    drawEssay(e);
+    resetScore();
+  }
+
+  function resetScore() {
+    document.querySelectorAll('.score-btn').forEach((b) => b.classList.remove('selected'));
+    document.getElementById('current-score-display').textContent = '当前分数：未评分';
+    document.getElementById('confirm-display').textContent = '';
+  }
+
+  document.getElementById('score-grid').addEventListener('click', (ev) => {
+    const btn = ev.target.closest('.score-btn');
+    if (!btn) return;
+    document.querySelectorAll('.score-btn').forEach((b) => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    document.getElementById('current-score-display').textContent = '当前分数：' + btn.dataset.score + ' 分';
+  });
+
+  document.getElementById('confirm-btn').addEventListener('click', () => {
+    const selected = document.querySelector('.score-btn.selected');
+    if (!selected) { document.getElementById('confirm-display').textContent = '请先选择分数'; return; }
+    document.getElementById('confirm-display').textContent = '已确认分数 ' + selected.dataset.score + ' 分';
+  });
+
+  document.getElementById('submit-btn').addEventListener('click', () => {
+    document.getElementById('confirm-display').textContent = '已提交（模拟）';
+  });
+
+  document.getElementById('next-btn').addEventListener('click', () => {
+    studentIdx += 1;
+    essayIdx += 1;
+    renderStudent();
+  });
+
+  renderStudent();
+</script>
+</body>
+</html>
