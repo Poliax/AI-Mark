@@ -60,7 +60,14 @@ for /l %%i in (1,1,90) do (
 rem 3. 停掉旧 Agent（避免端口冲突，保证用上最新版本）
 for /f "tokens=5" %%p in ('netstat -ano ^| findstr :8766 ^| findstr LISTENING') do taskkill /f /pid %%p >nul 2>nul
 
-rem 4. 启动 Agent（DRY RUN：只高亮建议分数，绝不点击）
+rem 4. 依赖缺失时自动补装（首次运行约 1-2 分钟）
+if not exist "%PROJ%\node_modules" (
+  echo 首次运行，正在安装依赖（约 1-2 分钟）…
+  cd /d "%PROJ%"
+  call npm install --no-audit --no-fund --cache "%PROJ%\.npm-cache-local" --registry=https://registry.npmmirror.com
+)
+
+rem 5. 启动 Agent（DRY RUN：只高亮建议分数，绝不点击）
 cd /d "%PROJ%"
 call npm run start
 pause
