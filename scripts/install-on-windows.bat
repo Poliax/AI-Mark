@@ -29,7 +29,7 @@ xcopy /e /i /y "%~dp0." "%PROJ%" >nul
 
 cd /d "%PROJ%"
 echo 正在安装依赖（首次约 1-2 分钟）…
-call npm install --no-audit --no-fund --cache "%PROJ%\.npm-cache-local"
+call npm install --no-audit --no-fund --cache --registry=https://registry.npmmirror.com "%PROJ%\.npm-cache-local"
 if errorlevel 1 (
   echo [错误] 依赖安装失败，请检查网络后重试。
   pause

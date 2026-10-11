@@ -33,7 +33,7 @@ fi
 cd "$PROJ"
 
 echo "▶ 安装依赖（首次约 1-2 分钟）…"
-npm install --no-audit --no-fund --cache "$PROJ/.npm-cache-local"
+npm install --no-audit --no-fund --cache --registry=https://registry.npmmirror.com "$PROJ/.npm-cache-local"
 
 echo "▶ 创建桌面快捷方式…"
 cat > "$HOME/Desktop/启动阅卷助手.command" <<'LAUNCHER'
