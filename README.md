@@ -200,25 +200,27 @@ essay-agent/
 
 ## 其他老师怎么安装（Git 下载版）
 
-前置条件：电脑装有 **Node.js ≥ 20**（https://nodejs.org LTS 版）与 **Chrome 或 Edge**（火狐不支持）。
+**不需要手动安装 Node.js**——安装脚本会自动下载内置运行时（约 40MB，仅首次）。只需电脑装有 **Chrome / Edge**（火狐不支持）。
 
 ```bash
 # 方式一：git 克隆（推荐，以后更新只需 git pull）
 git clone <仓库地址>
 cd essay-agent
-npm install
 
-# 方式二：Git 仓库页面下载 zip 并解压，然后在该目录执行 npm install
+# 方式二：在仓库页面点「Code → Download ZIP」下载并解压
 ```
 
-然后两种启动方式任选：
+然后在克隆/解压出来的目录里运行安装脚本（自动下载 Node 运行时 + 安装依赖 + 创建桌面快捷方式）：
 
-- **一键装快捷方式（推荐）**：Mac 双击 `scripts/install-on-new-mac.command`；Windows 双击 `scripts/install-on-windows.bat`；Linux 运行 `scripts/install-on-linux.sh`。装完桌面出现「启动阅卷助手」，以后双击即可。
-- **直接跑**：`npm run start`（Mac 上请先按 README 前面说明用调试端口启动 Chrome/Edge，或加 `--mode managed`）。
+- **macOS**：双击 `scripts/install-on-new-mac.command`（首次需右键 → 打开）
+- **Windows**：双击 `scripts/install-on-windows.bat`（若被拦截：右键 → 属性 → 勾「解除锁定」→ 确定）
+- **Linux**：`bash scripts/install-on-linux.sh`
 
-首次使用：复制 `.env.example` 为 `.env` 并填入自己的智谱 Key（免费注册 https://open.bigmodel.cn/usercenter/apikeys），或在悬浮面板「大模型设置」里直接填。默认已内置好分数阅卷页规则，其他平台改 `config.local.json`（见 `config.example.json`）。
+装完桌面出现「启动阅卷助手」，以后双击即可。也可以直接 `npm run start`（需先按上文说明用调试端口启动 Chrome/Edge，或加 `--mode managed`）。
 
-> 安全：仓库不含任何账号/Key/学生数据（`.env`、`config.local.json`、`logs/`、`data/` 均被 git 忽略）。每人用自己的 Key、独立学习自己的评分尺度。
+首次使用：在悬浮面板「**大模型设置**」里粘贴**自己的智谱 API Key**（免费注册 https://open.bigmodel.cn/usercenter/apikeys），或复制 `.env.example` 为 `.env` 填写。默认已内置好分数阅卷页规则，其他平台改 `config.local.json`（见 `config.example.json`）。
+
+> 安全：仓库不含任何账号/Key/学生数据（`.env`、`config.local.json`、`logs/`、`data/`、`runtime/` 均被 git 忽略）。每人用自己的 Key、独立学习自己的评分尺度。
 
 ## 常见问题
 

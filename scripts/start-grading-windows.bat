@@ -16,11 +16,17 @@ if not exist "%PROJ%\package.json" (
 rem 包内自带 Node 运行时（发布包）时优先使用
 if exist "%PROJ%\runtime\win-x64\node.exe" set "PATH=%PROJ%\runtime\win-x64;%PATH%"
 where node >nul 2>nul
+if not errorlevel 1 goto :nodeok
+echo 未检测到 Node.js，正在自动下载内置运行时（约 30MB，仅首次）…
+powershell -NoProfile -ExecutionPolicy Bypass -File "%PROJ%\scripts\fetch-runtime.ps1"
+if exist "%PROJ%\runtime\win-x64\node.exe" set "PATH=%PROJ%\runtime\win-x64;%PATH%"
+where node >nul 2>nul
 if errorlevel 1 (
-  echo [错误] 未检测到 Node.js。请先到 https://nodejs.org 下载 LTS 版安装。
+  echo [错误] 自动下载失败，请手动安装 Node.js（https://nodejs.org LTS 版）。
   pause
   exit /b 1
 )
+:nodeok
 
 rem 1. 检测专用浏览器是否已在运行
 powershell -Command "try { (Invoke-WebRequest -Uri http://127.0.0.1:%PORT%/json/version -TimeoutSec 2 -UseBasicParsing).StatusCode } catch { exit 1 }" >nul 2>nul

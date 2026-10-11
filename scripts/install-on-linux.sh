@@ -6,14 +6,32 @@ PROJ="$HOME/essay-agent"
 SRC="$(cd "$(dirname "$0")" && pwd)"
 
 echo "▶ 检查 Node.js…"
-if ! command -v node >/dev/null 2>&1; then
-  echo "✗ 未安装 Node.js，请先安装："
-  echo "  Debian/Ubuntu: sudo apt update && sudo apt install -y nodejs npm"
-  echo "  Fedora/RHEL:   sudo dnf install -y nodejs npm"
-  echo "  或从 https://nodejs.org 下载 LTS 版。装完再运行本脚本。"
-  exit 1
+# 优先使用包内自带的运行时；其次系统 Node；都没有则自动下载
+if [ -x "$SRC/runtime/linux-x64/bin/node" ]; then
+  export PATH="$SRC/runtime/linux-x64/bin:$PATH"
+  echo "✓ 使用内置 Node $(node --version)"
+elif [ -x "$SRC/runtime/linux-arm64/bin/node" ]; then
+  export PATH="$SRC/runtime/linux-arm64/bin:$PATH"
+  echo "✓ 使用内置 Node $(node --version)"
+elif command -v node >/dev/null 2>&1; then
+  echo "✓ Node.js $(node --version)"
+else
+  echo "▶ 未检测到 Node.js，正在自动下载内置运行时（约 40MB，仅首次）…"
+  if [ -x "$SRC/scripts/fetch-runtime.sh" ] && bash "$SRC/scripts/fetch-runtime.sh"; then
+    if [ -x "$SRC/runtime/linux-x64/bin/node" ]; then
+      export PATH="$SRC/runtime/linux-x64/bin:$PATH"
+    elif [ -x "$SRC/runtime/linux-arm64/bin/node" ]; then
+      export PATH="$SRC/runtime/linux-arm64/bin:$PATH"
+    fi
+    echo "✓ 使用自动下载的 Node $(node --version)"
+  else
+    echo "✗ 自动下载失败，请手动安装 Node.js："
+    echo "  Debian/Ubuntu: sudo apt update && sudo apt install -y nodejs npm"
+    echo "  Fedora/RHEL:   sudo dnf install -y nodejs npm"
+    echo "  或从 https://nodejs.org 下载 LTS 版。装完再运行本脚本。"
+    exit 1
+  fi
 fi
-echo "✓ Node.js $(node --version)"
 
 echo "▶ 复制程序到 $PROJ …"
 if [ "$SRC" != "$PROJ" ]; then

@@ -11,3 +11,4 @@ config.local.json
 data/
 build/
 /启动阅卷助手.command
+runtime/

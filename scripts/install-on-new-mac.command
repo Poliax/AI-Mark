@@ -6,7 +6,7 @@ PROJ="$HOME/essay-agent"
 SRC="$(cd "$(dirname "$0")" && pwd)"
 
 echo "▶ 检查 Node.js…"
-# 优先使用包内自带的 Node 运行时（发布包，免安装）；否则用系统 Node
+# 优先使用包内自带的 Node 运行时（发布包，免安装）；其次系统 Node；都没有则自动下载
 RUNTIME=""
 if [ "$(uname -m)" = "arm64" ] && [ -x "$SRC/runtime/darwin-arm64/bin/node" ]; then
   RUNTIME="$SRC/runtime/darwin-arm64"
@@ -19,9 +19,20 @@ if [ -n "$RUNTIME" ]; then
 elif command -v node >/dev/null 2>&1; then
   echo "✓ Node.js $(node --version)"
 else
-  echo "✗ 未安装 Node.js。正在打开下载页，请下载 LTS 版双击安装，装完再双击本文件。"
-  open https://nodejs.org
-  exit 1
+  echo "▶ 未检测到 Node.js，正在自动下载内置运行时（约 40MB，仅首次）…"
+  if [ -x "$SRC/scripts/fetch-runtime.sh" ] && bash "$SRC/scripts/fetch-runtime.sh"; then
+    if [ "$(uname -m)" = "arm64" ] && [ -x "$SRC/runtime/darwin-arm64/bin/node" ]; then
+      RUNTIME="$SRC/runtime/darwin-arm64"
+    elif [ -x "$SRC/runtime/darwin-x64/bin/node" ]; then
+      RUNTIME="$SRC/runtime/darwin-x64"
+    fi
+    export PATH="$RUNTIME/bin:$PATH"
+    echo "✓ 使用自动下载的 Node $(node --version)"
+  else
+    echo "✗ 自动下载失败。请手动安装 Node.js（https://nodejs.org LTS 版），装完再双击本文件。"
+    open https://nodejs.org
+    exit 1
+  fi
 fi
 
 echo "▶ 复制程序到 $PROJ …"

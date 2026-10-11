@@ -38,7 +38,7 @@ copy_project() {
   mkdir -p "$out"
   tar -cf - \
     --exclude node_modules --exclude dist --exclude logs --exclude artifacts \
-    --exclude build --exclude .npm-cache-local --exclude chrome-profile --exclude data \
+    --exclude build --exclude .npm-cache-local --exclude chrome-profile --exclude data --exclude runtime \
     --exclude '.git' --exclude '*.command' . | tar -xf - -C "$out"
   # 无 Key 的 .env：新用户在面板里填自己的 Key
   cat > "$out/.env" <<'ENVEOF'

@@ -11,20 +11,29 @@ for /f "delims=" %%d in ('powershell -NoProfile -Command "[Environment]::GetFold
 set "LOG=%DESKTOP%\essay-agent-安装日志.txt"
 echo [%date% %time%] 开始安装 > "%LOG%"
 
-rem 优先使用包内自带的 Node 运行时（发布包，免安装）；否则用系统 Node
+rem 优先使用包内自带的 Node 运行时（发布包，免安装）；其次系统 Node；都没有则自动下载
 if exist "%~dp0runtime\win-x64\node.exe" (
   set "PATH=%~dp0runtime\win-x64;%PATH%"
   echo [OK] 使用内置 Node >> "%LOG%"
   goto :nodeok
 )
 where node >nul 2>nul
-if errorlevel 1 (
-  echo [错误] 未检测到 Node.js。请先到 https://nodejs.org 下载 LTS 版双击安装，装完再双击本文件。
-  echo [错误] 未检测到 Node.js >> "%LOG%"
-  start https://nodejs.org
-  pause
-  exit /b 1
+if not errorlevel 1 goto :nodeok
+
+echo 未检测到 Node.js，正在自动下载内置运行时（约 30MB，仅首次）…
+echo [自动下载] Node 运行时 >> "%LOG%"
+powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\fetch-runtime.ps1"
+if exist "%~dp0runtime\win-x64\node.exe" (
+  set "PATH=%~dp0runtime\win-x64;%PATH%"
+  echo [OK] 自动下载完成 >> "%LOG%"
+  goto :nodeok
 )
+echo [错误] 自动下载失败。请手动安装 Node.js（https://nodejs.org LTS 版）。
+echo [错误] 自动下载失败 >> "%LOG%"
+start https://nodejs.org
+pause
+exit /b 1
+
 :nodeok
 node --version >> "%LOG%" 2>&1
 
