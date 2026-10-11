@@ -38,11 +38,11 @@ echo [OK] 程序已复制到 %PROJ% >> "%LOG%"
 rem 先创建桌面快捷方式（装依赖前就有入口）
 echo 正在创建桌面快捷方式…
 if not exist "%DESKTOP%" mkdir "%DESKTOP%"
-copy /y "%~dp0scripts\启动阅卷助手-windows.bat" "%DESKTOP%\启动阅卷助手.bat" >nul
+copy /y "%~dp0scripts\start-grading-windows.bat" "%DESKTOP%\启动阅卷助手.bat" >nul
 echo [OK] 桌面快捷方式已创建: %DESKTOP%\启动阅卷助手.bat >> "%LOG%"
 
 rem 同时在本文件夹也放一份启动器（桌面找不到时直接用）
-copy /y "%~dp0scripts\启动阅卷助手-windows.bat" "%~dp0启动阅卷助手.bat" >nul
+copy /y "%~dp0scripts\start-grading-windows.bat" "%~dp0启动阅卷助手.bat" >nul
 echo [OK] 本文件夹也有「启动阅卷助手.bat」可双击 >> "%LOG%"
 
 cd /d "%PROJ%"

@@ -34,7 +34,7 @@ cat > "$DESKTOP_DIR/启动阅卷助手.desktop" <<EOF
 Type=Application
 Name=启动阅卷助手
 Comment=AI 英语作文阅卷助手
-Exec=bash -c 'cd $HOME/essay-agent && bash scripts/启动阅卷助手-linux.sh; read -p \"按回车退出\"'
+Exec=bash -c 'cd $HOME/essay-agent && bash scripts/start-grading-linux.sh; read -p \"按回车退出\"'
 Terminal=true
 Categories=Utility;
 EOF
