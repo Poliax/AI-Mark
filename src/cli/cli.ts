@@ -305,7 +305,8 @@ async function start(opts: CommonOpts): Promise<void> {
   } catch (e) {
     console.warn(`[agent] 注入悬浮面板失败（可改用独立面板页 ${origin}/panel）: ${(e as Error).message}`);
   }
-  // 面板巡护：每 5 秒检查所有标签页，缺面板的自动补注入（页面加载时序/SPA 差异兜底）
+  // 面板巡护：定期检查所有标签页，缺面板的自动补注入（页面加载时序/SPA 差异兜底）
+  // 说明：抓取页面信息只在本机空闲/暂停时进行，避免批改过程中重复全页扫描拖慢页面
   const panelKeeper = setInterval(() => {
     for (const ctx of connected.browser.contexts()) {
       for (const p of ctx.pages()) {
@@ -335,10 +336,12 @@ async function start(opts: CommonOpts): Promise<void> {
           });
       }
     }
-    // 同步刷新页面信息（题号/进度/考试信息），供面板实时对应
-    agent.refreshPageInfo().catch(() => {});
+    // 仅在空闲/暂停时同步页面信息（批改中不做额外全页扫描，避免拖慢页面与 CPU）
+    if (machine.state === 'IDLE' || machine.state === 'PAUSE') {
+      agent.refreshPageInfo().catch(() => {});
+    }
     server.broadcast();
-  }, 5000);
+  }, 8000);
   panelKeeper.unref?.();
 
   console.log('[agent] 在面板中填写/选择评分标准后点击「开始」；DRY RUN 下只会高亮建议按钮，绝不点击。');

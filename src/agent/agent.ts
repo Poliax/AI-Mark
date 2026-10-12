@@ -167,6 +167,8 @@ export class Agent {
    * 教师翻页时页面会重新请求，监听器实时更新 → 面板「教师打分」与页面同步。
    */
   attachPlatformListener(): void {
+    // 让适配器能用「平台考号」做廉价且精准的页面变化检测
+    this.deps.adapter.setIdentityProvider(() => this.lastKaohao);
     const handler = async (res: Response) => {
       try {
         if (!/subject\/block\/review\/history/.test(res.url())) return;
@@ -745,6 +747,7 @@ export class Agent {
       last_record_id: ctx ? String(ctx.index).padStart(4, '0') : null,
       records: this.deps.logger
         .listRecords()
+        .slice(-20) // 只回传最近 20 条，避免面板轮询载荷随批量增长
         .map((r) => ({
           student_index: r.student_index,
           ai_score: r.ai_score,

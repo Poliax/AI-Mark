@@ -187,8 +187,12 @@ export function buildPanelScript(origin: string): string {
       } else box.style.display = 'none';
     };
 
-    // ---- 面板所在页面自身的信息解析（与页面左上角严格同步，实时跟随）----
+    // ---- 面板所在页面自身的信息解析（与页面左上角同步；节流避免高频全页扫描拖慢页面）----
+    let lastLocalScan = 0;
     const refreshLocal = () => {
+      const now = Date.now();
+      if (now - lastLocalScan < 1200) return; // 最多每 1.2 秒扫一次
+      lastLocalScan = now;
       try {
         const leaves = [];
         document.querySelectorAll('span,div,b,i,p').forEach((el) => {
@@ -238,7 +242,7 @@ export function buildPanelScript(origin: string): string {
     try {
       const mo = new MutationObserver(() => {
         if (localTimer) return;
-        localTimer = setTimeout(() => { localTimer = null; refreshLocal(); }, 150);
+        localTimer = setTimeout(() => { localTimer = null; refreshLocal(); }, 400);
       });
       mo.observe(document.body, { subtree: true, childList: true, characterData: true });
     } catch (e) { /* 不支持则仅靠轮询 */ }
@@ -310,7 +314,7 @@ export function buildPanelScript(origin: string): string {
 
     // WebSocket 推送；失败降级为轮询
     let poll = null;
-    const startPoll = () => { if (poll) return; poll = setInterval(() => fetch(ORIGIN + '/api/status').then(r => r.json()).then(s => render(s.status || s)).catch(() => {}), 400); };
+    const startPoll = () => { if (poll) return; poll = setInterval(() => fetch(ORIGIN + '/api/status').then(r => r.json()).then(s => render(s.status || s)).catch(() => {}), 1500); };
     try {
       const ws = new WebSocket(WS);
       ws.onmessage = (e) => { const d = JSON.parse(e.data); if (d.status) render(d.status); };
