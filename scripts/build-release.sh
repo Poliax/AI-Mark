@@ -40,6 +40,23 @@ copy_project() {
     --exclude node_modules --exclude dist --exclude logs --exclude artifacts \
     --exclude build --exclude .npm-cache-local --exclude chrome-profile --exclude data --exclude runtime \
     --exclude '.git' --exclude '*.command' . | tar -xf - -C "$out"
+  # 消毒：包内 config.local.json 若含 API Key 一律清空
+  python3 - "$out/config.local.json" <<'PY'
+import json, sys, os
+p = sys.argv[1]
+if os.path.exists(p):
+    try:
+        d = json.load(open(p, encoding='utf-8'))
+        ai = d.get('ai')
+        if isinstance(ai, dict):
+            for k in ('vision', 'grading'):
+                if isinstance(ai.get(k), dict):
+                    ai[k]['apiKey'] = ''
+            json.dump(d, open(p, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
+    except Exception as e:
+        print('  配置消毒跳过:', e)
+PY
+
   # 无 Key 的 .env：新用户在面板里填自己的 Key
   cat > "$out/.env" <<'ENVEOF'
 # 智谱 AI 开放平台 API Key（https://open.bigmodel.cn/usercenter/apikeys 免费注册创建）
