@@ -48,6 +48,7 @@ describe('ControlServer + 悬浮面板', () => {
       student_kaohao: null,
       page_ready: true,
       auto_watch: false,
+      ai_key_configured: true,
       calibration: { enabled: true, sample_count: 12, avg_deviation: 0.5, min_samples: 10 },
       target: { url: page.url(), title: '', student_identity: '考生：王小明　考号：20260001' },
       last_record_id: '0003',

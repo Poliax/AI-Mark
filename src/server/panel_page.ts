@@ -152,7 +152,8 @@ function render(s) {
   $('target').textContent = s.target && s.target.url ? s.target.url : '-';
   const msg = s.paused_reason || s.last_error;
   const box = $('msg');
-  if (msg) { box.style.display = 'block'; box.textContent = msg; box.className = 'msg' + (s.state === 'PAUSE' ? '' : ' ok'); }
+  if (!s.ai_key_configured) { box.style.display = 'block'; box.textContent = '⚠ 请展开下方「大模型设置」，粘贴你自己的智谱 API Key（免费注册 open.bigmodel.cn）→ 保存。'; box.className = 'msg'; }
+  else if (msg) { box.style.display = 'block'; box.textContent = msg; box.className = 'msg' + (s.state === 'PAUSE' ? '' : ' ok'); }
   else box.style.display = 'none';
   const rows = $('rows');
   rows.innerHTML = (s.records || []).slice(-30).reverse().map(r =>

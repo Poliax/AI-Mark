@@ -733,6 +733,7 @@ export class Agent {
       student_kaohao: this.lastKaohao,
       page_ready: analysis?.is_grading_page ?? false,
       auto_watch: cfg.safety.autoWatch,
+      ai_key_configured: cfg.ai.mock || !!(cfg.ai.vision.apiKey || cfg.ai.grading.apiKey),
       calibration: (() => {
         if (!cfg.calibration.enabled) return null;
         const stats = this.deps.calibrationStore.statsFor(cfg.rubric.id, cfg.calibration.window);

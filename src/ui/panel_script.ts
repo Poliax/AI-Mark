@@ -178,7 +178,11 @@ export function buildPanelScript(origin: string): string {
       }
       const msg = s.paused_reason || s.last_error;
       const box = $('msg');
-      if (s.state === 'IDLE' && !s.page_ready) {
+      if (!s.ai_key_configured) {
+        box.style.display = 'block';
+        box.textContent = '⚠ 请展开下方「大模型设置」，粘贴你自己的智谱 API Key（免费注册 open.bigmodel.cn）→ 保存，然后即可开始。';
+        box.className = 'msg';
+      } else if (s.state === 'IDLE' && !s.page_ready) {
         box.style.display = 'block';
         box.textContent = '请点开具体某份试卷，进入打分页面（页面地址含 mark）。进入后工具会自动绑定并准备就绪。';
         box.className = 'msg ok';

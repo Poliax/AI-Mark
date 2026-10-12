@@ -236,6 +236,8 @@ export interface AgentStatus {
   student_kaohao: string | null;
   /** 当前绑定页是否为可批改的阅卷页（供面板提示） */
   page_ready: boolean;
+  /** 是否已配置大模型 API Key（未配置时面板提示去填写） */
+  ai_key_configured: boolean;
   /** 自动监听模式（无需教师点工具按钮，页面换学生即自动批改并高亮） */
   auto_watch: boolean;
   /** 校准（学习教师尺度）状态 */

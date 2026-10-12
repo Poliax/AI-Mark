@@ -184,7 +184,7 @@ async function start(opts: CommonOpts): Promise<void> {
   console.log(`[agent] 模型: 视觉=${cfg.ai.mock ? 'mock' : cfg.ai.vision.model} 评分=${cfg.ai.mock ? 'mock' : cfg.ai.grading.model}${cfg.ai.mock ? '' : (cfg.ai.vision.apiKey ? '（已配置 Key）' : '（未配置 Key！）')}`);
   console.log(`[agent] 评分标准: ${cfg.rubric.title}（满分 ${cfg.rubric.max_score}）`);
   if (!cfg.ai.mock && !cfg.ai.vision.apiKey && !cfg.ai.grading.apiKey) {
-    throw new Error('未配置大模型 API Key。请填写 .env（参考 .env.example），或用 --mock 演示。');
+    console.warn('⚠️ 尚未配置大模型 API Key：程序仍会启动，请在悬浮面板「大模型设置」里填入自己的智谱 API Key（免费注册 open.bigmodel.cn），或编辑 .env。');
   }
 
   const connected = await connectBrowser(cfg.browser);
