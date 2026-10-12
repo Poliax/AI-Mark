@@ -128,6 +128,7 @@ export function buildPanelScript(origin: string): string {
     if (bound) return;
     bound = true;
     const $ = (id) => shadow.getElementById(id);
+    let setWatch = () => {}; // 由按钮逻辑在下方赋值（render 调用）
     const post = (path, body) => fetch(ORIGIN + path, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -149,6 +150,15 @@ export function buildPanelScript(origin: string): string {
           ? '样本' + c.sample_count + ' · 偏差' + (c.avg_deviation >= 0 ? '+' : '') + c.avg_deviation
           : '样本不足 ' + c.sample_count + '/' + c.min_samples;
       $('conf').textContent = s.confidence != null ? Math.round(s.confidence * 100) + '%' : '-';
+      // 自动监听状态与按钮外观
+      setWatch(!!s.auto_watch);
+      $('watch').textContent = s.auto_watch ? '已开启（换学生自动批改）' : '已关闭';
+      // 未配置 Key 时自动展开「大模型设置」引导填写（只自动展开一次）
+      if (!s.ai_key_configured && !window.__aiOpened) {
+        const d = document.getElementById('ai-details');
+        if (d) d.setAttribute('open', 'open');
+        window.__aiOpened = true;
+      }
       const turl = s.target && s.target.url ? s.target.url : '';
       const isTarget = turl && location.href.split('?')[0] === turl.split('?')[0];
       $('turl').textContent = turl ? decodeURIComponent(turl).slice(-45) : '-';
@@ -280,6 +290,8 @@ export function buildPanelScript(origin: string): string {
       watchBtn.style.background = on ? '#166534' : '';
       watchBtn.style.borderColor = on ? '#166534' : '';
     };
+    // 供 render 调用（模板内函数需在 render 之前定义，使用 var 提升到闭包作用域）
+    setWatch = paintWatch;
     if (watchBtn) watchBtn.onclick = () => post('/api/auto-watch', { enabled: !autoWatch });
     $('b-skip').onclick = () => cmd('skip');
     $('b-stop').onclick = () => cmd('stop');

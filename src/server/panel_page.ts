@@ -116,6 +116,7 @@ const STATE_LABELS = { IDLE:'空闲（等待开始）', CHECK_PAGE:'检查页面
   GRADE:'AI 评分', VALIDATE_SCORE:'校验分数', INPUT_SCORE:'定位/填写分数', VERIFY_SCORE:'验证分数',
   SUBMIT:'提交', VERIFY_SUBMISSION:'验证提交', NEXT_ESSAY:'等待下一份', PAUSE:'已暂停', STOPPED:'已停止' };
 const $ = (id) => document.getElementById(id);
+let setWatch = () => {}; // 由下方按钮逻辑赋值，render 使用
 const post = (path, body) => fetch(ORIGIN + path, {
   method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body || {}) });
 function render(s) {
@@ -133,6 +134,14 @@ function render(s) {
       ? '样本' + c.sample_count + ' · 偏差' + (c.avg_deviation >= 0 ? '+' : '') + c.avg_deviation
       : '样本不足 ' + c.sample_count + '/' + c.min_samples;
   $('conf').textContent = s.confidence != null ? Math.round(s.confidence * 100) + '%' : '-';
+  // 自动监听状态 + 未配置 Key 时自动展开设置引导
+  setWatch(!!s.auto_watch);
+  $('watch').textContent = s.auto_watch ? '已开启（换学生自动批改）' : '已关闭';
+  if ((!s.ai_key_configured || location.hash === '#ai') && !window.__aiOpened) {
+    const d = document.getElementById('ai-details');
+    if (d) { d.setAttribute('open', 'open'); d.scrollIntoView({ block: 'center' }); }
+    window.__aiOpened = true;
+  }
   $('prog').textContent = s.progress ? s.progress.done + ' / ' + s.progress.total : '-';
   const ex = s.exam_info;
   const zh = { 1: '一', 2: '二', 3: '三', 4: '四', 5: '五', 6: '六', 7: '七', 8: '八', 9: '九', 10: '十' };
@@ -181,6 +190,7 @@ const paintWatch = (on) => {
   watchBtn.style.color = on ? '#fff' : '';
   watchBtn.style.borderColor = on ? '#166534' : '';
 };
+setWatch = paintWatch;
 if (watchBtn) watchBtn.onclick = () => post('/api/auto-watch', { enabled: !autoWatch });
 $('b-skip').onclick = () => cmd('skip');
 $('b-stop').onclick = () => cmd('stop');

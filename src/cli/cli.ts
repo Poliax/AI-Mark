@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { parseArgs } from 'node:util';
+import { exec } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright-core';
@@ -184,7 +185,7 @@ async function start(opts: CommonOpts): Promise<void> {
   console.log(`[agent] 模型: 视觉=${cfg.ai.mock ? 'mock' : cfg.ai.vision.model} 评分=${cfg.ai.mock ? 'mock' : cfg.ai.grading.model}${cfg.ai.mock ? '' : (cfg.ai.vision.apiKey ? '（已配置 Key）' : '（未配置 Key！）')}`);
   console.log(`[agent] 评分标准: ${cfg.rubric.title}（满分 ${cfg.rubric.max_score}）`);
   if (!cfg.ai.mock && !cfg.ai.vision.apiKey && !cfg.ai.grading.apiKey) {
-    console.warn('⚠️ 尚未配置大模型 API Key：程序仍会启动，请在悬浮面板「大模型设置」里填入自己的智谱 API Key（免费注册 open.bigmodel.cn），或编辑 .env。');
+    console.warn('⚠️ 尚未配置大模型 API Key：程序仍会启动，请在弹出的设置页面「大模型设置」里填入自己的智谱 API Key（免费注册 open.bigmodel.cn），或编辑 .env。');
   }
 
   const connected = await connectBrowser(cfg.browser);
@@ -305,6 +306,14 @@ async function start(opts: CommonOpts): Promise<void> {
 
   const origin = await server.start();
   console.log(`[agent] 控制面板: ${origin}/panel（阅卷页面内也已注入悬浮面板）`);
+  // 未配置 Key：自动打开设置页，引导教师填写（免去手动编辑 .env）
+  if (!cfg.ai.mock && !cfg.ai.vision.apiKey && !cfg.ai.grading.apiKey) {
+    const url = `${origin}/panel#ai`;
+    const cmd =
+      process.platform === 'darwin' ? `open "${url}"` : process.platform === 'win32' ? `start "" "${url}"` : `xdg-open "${url}"`;
+    exec(cmd, () => {});
+    console.log(`[agent] 首次使用：已自动打开设置页面 ${url} ，请在「大模型设置」里填入智谱 API Key`);
+  }
   // 教师打分/考号等平台数据变化时，立即推送面板（无需等 5 秒轮询）
   agent.setPlatformUpdateHandler(() => server.broadcast());
   // 注入悬浮面板：所有标签页（shadow DOM，默认左上角，不遮挡右侧评分区）

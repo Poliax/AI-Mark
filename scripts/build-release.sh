@@ -81,7 +81,7 @@ chmod +x "build/release/essay-agent-mac/install.command"
 cat > "build/release/essay-agent-mac/README.txt" <<'EOF'
 【安装步骤（macOS，免装任何环境）】
 1. 双击本文件夹里的 install.command（首次需右键→打开）；
-2. 等待 1-2 分钟自动安装，桌面出现「启动阅卷助手」；
+2. 等待 1-2 分钟自动安装，桌面出现「启动阅卷助手」应用（.app，双击即用，无终端窗口）；
 3. 双击「启动阅卷助手」→ 专用 Chrome 打开好分数 → 登录后进入阅卷页；
 4. 悬浮面板里「大模型设置」→ 粘贴自己的智谱 API Key（免费注册：open.bigmodel.cn）→ 保存；
 5. 填评分标准 → 点「开始」。默认 DRY RUN：只高亮建议分数，绝不点击。
@@ -95,7 +95,7 @@ cp scripts/install-on-windows.bat "build/release/essay-agent-windows/install.bat
 cat > "build/release/essay-agent-windows/README.txt" <<'EOF'
 【安装步骤（Windows 10/11，免装任何环境）】
 1. 双击本文件夹里的 install.bat（若 Windows 提示拦截：右键 install.bat → 属性 → 勾选「解除锁定」→ 确定，再双击）；
-2. 等待 1-2 分钟自动安装，桌面出现「启动阅卷助手.bat」；
+2. 等待 1-2 分钟自动安装，桌面出现「启动阅卷助手」图标（最小化运行，不弹黑窗口）；
 3. 双击「启动阅卷助手」→ 专用 Edge/Chrome 打开好分数 → 登录后进入阅卷页；
 4. 悬浮面板里「大模型设置」→ 粘贴自己的智谱 API Key（免费注册：open.bigmodel.cn）→ 保存；
 5. 填评分标准 → 点「开始」。默认 DRY RUN：只高亮建议分数，绝不点击。
