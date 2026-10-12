@@ -20,7 +20,7 @@ export const AI_PRESETS = {
   glm: {
     name: '智谱 GLM（glm-4v-flash 视觉免费）',
     vision: { baseUrl: 'https://open.bigmodel.cn/api/paas/v4', model: 'glm-4v-flash' },
-    grading: { baseUrl: 'https://open.bigmodel.cn/api/paas/v4', model: 'glm-4-flash' },
+    grading: { baseUrl: 'https://open.bigmodel.cn/api/paas/v4', model: 'glm-4-flash-250414' },
   },
   openai: {
     name: 'OpenAI',
