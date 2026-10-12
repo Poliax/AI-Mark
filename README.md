@@ -1,5 +1,25 @@
 # 📝 essay-agent — 高中英语作文 AI 自动阅卷浏览器 Agent
 
+## ⬇️ 我要下载安装包（其他老师看这里）
+
+**Windows 10/11（免安装 Node，解压双击即用）**
+
+👉 **https://github.com/Poliax/AI-Mark/releases/latest/download/essay-agent-windows.zip**
+
+**macOS（Intel / Apple 芯片通用）**
+
+👉 **https://github.com/Poliax/AI-Mark/releases/latest/download/essay-agent-mac.zip**
+
+安装三步：
+
+1. 下载上面的 zip → 解压（Windows 解压后双击 `install.bat`；Mac 右键打开 `install.command`）；
+2. 等 1-2 分钟，桌面出现「**启动阅卷助手**」图标（Windows 为快捷方式、Mac 为 .app，**都不会弹黑窗口**）；
+3. 双击它 → 浏览器登录好分数 → 首次会**自动打开设置页**，粘贴**自己的**智谱 API Key（免费注册 https://open.bigmodel.cn ）→ 保存 → 开始批改（默认 DRY RUN：只高亮建议分数，不点击）。
+
+> 找不到下载位置？GitHub 页面**右侧栏的「Releases」**就是下载区，或直接点上面的链接。
+
+---
+
 教师登录第三方阅卷平台后，由本工具**接管已打开的浏览器页面**：自动识别阅卷页面 → 截取作文区域 → Vision LLM + OCR 识别手写作文 → 按教师提供的评分标准评分 → 输出分数与置信度 → 定位分数按钮 →（DRY RUN 验收后）自动填分/确认/提交 → 自动切换下一份。
 
 > ⚠️ **安全第一（本系统最高优先级）**
