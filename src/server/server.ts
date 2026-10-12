@@ -27,6 +27,8 @@ export interface ControlServerHooks {
   getCalibration(): { enabled: boolean; sample_count: number; avg_deviation: number; min_samples: number };
   /** 重置当前评分标准的校准数据 */
   resetCalibration(): void;
+  /** 开启/关闭「自动监听模式」（页面换学生即自动批改并高亮；仍不点击平台按钮） */
+  setAutoWatch(enabled: boolean): void;
   onCommand(command: string): void;
   getRecordImage(kind: 'original' | 'preprocessed', studentIndex?: number): { data: Buffer; mime: string } | null;
   listRecords(): unknown[];
@@ -127,6 +129,14 @@ export class ControlServer {
         this.hooks.setAi(body);
         this.hooks.onLog('AI 设置已更新');
         this.json(res, 200, { ok: true });
+        this.broadcast();
+        return;
+      }
+      if (req.method === 'POST' && url.pathname === '/api/auto-watch') {
+        const body = (await readBody(req)) as { enabled?: boolean };
+        this.hooks.setAutoWatch(!!body.enabled);
+        this.hooks.onLog(`自动监听模式：${body.enabled ? '已开启' : '已关闭'}`);
+        this.json(res, 200, { ok: true, enabled: !!body.enabled });
         this.broadcast();
         return;
       }

@@ -3,7 +3,7 @@ import { parseArgs } from 'node:util';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright-core';
-import { loadConfig, saveRubricToLocal, saveAiToLocal, writeExampleConfig } from '../config/index.js';
+import { loadConfig, saveRubricToLocal, saveAiToLocal, saveSafetyToLocal, writeExampleConfig } from '../config/index.js';
 import { connectBrowser, pickTargetPage, injectScriptAllPages } from '../browser/manager.js';
 import { createAdapter } from '../automation/platform_adapter.js';
 import { createLogger } from '../logging/logger.js';
@@ -280,6 +280,16 @@ async function start(opts: CommonOpts): Promise<void> {
         calibrationStore.reset(cfg.rubric.id);
         console.log('[agent] 校准数据已重置（学习教师打分尺度重新开始）');
       },
+      setAutoWatch: (enabled) => {
+        cfg.safety.autoWatch = enabled;
+        saveSafetyToLocal(CWD, cfg.safety);
+        if (enabled) {
+          console.log('[agent] 自动监听模式已开启：页面出现新学生即自动批改并高亮建议分数（不点击平台按钮）');
+          machine.enqueue('start');
+        } else {
+          console.log('[agent] 自动监听模式已关闭');
+        }
+      },
       onCommand: (c) => machine.enqueue(c as never),
       getRecordImage: (kind, idx) => {
         const i = idx ?? agent.status(machine.state).records.at(-1)?.student_index ?? 1;
@@ -357,6 +367,12 @@ async function start(opts: CommonOpts): Promise<void> {
   };
   process.on('SIGINT', shutdown);
   process.on('SIGTERM', shutdown);
+
+  // 已保存「自动监听模式」时，启动即自动开始批改（无需教师点任何按钮）
+  if (cfg.safety.autoWatch) {
+    console.log('[agent] 自动监听模式已开启：无需点击按钮，页面出现新学生即自动批改并高亮建议分数');
+    machine.enqueue('start');
+  }
 
   await machine.run();
   logger.writeManifest();

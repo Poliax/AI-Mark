@@ -94,6 +94,11 @@ export const safetySchema = z.object({
   maxRegionFraction: z.number().min(0.1).max(1).default(0.75),
   /** 评分前必须确认的题号（可选；设置后题号不符直接 STOP） */
   expectedQuestionNumber: z.number().int().nullable().default(null),
+  /**
+   * 自动监听模式：无需教师点工具按钮，页面出现新学生即自动「截取→识别→评分→高亮建议分数」。
+   * 注意：仍不点击任何平台按钮，分数由教师自己选。
+   */
+  autoWatch: z.boolean().default(false),
 });
 
 export const browserSchema = z.object({

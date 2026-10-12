@@ -625,7 +625,10 @@ export class Agent {
       ctx.nextBeforeSnapshot = await this.deps.adapter.snapshot(this.page);
     }
     const before = ctx.nextBeforeSnapshot;
-    const timeout = this.deps.config.platform.nextEssayTimeoutMs;
+    // 自动监听模式：一直等待教师切换学生（不超时暂停）；否则按配置超时
+    const timeout = this.deps.config.safety.autoWatch
+      ? Number.POSITIVE_INFINITY
+      : this.deps.config.platform.nextEssayTimeoutMs;
 
     // §11：轮询等待页面变化（学生切换），不使用固定 sleep 后盲点；期间响应暂停/停止
     // 注意：高亮在此期间保持显示 —— 等待教师切换时，教师正需要核对「建议点击」提示
@@ -729,6 +732,7 @@ export class Agent {
       teacher_score: this.lastTeacherScore,
       student_kaohao: this.lastKaohao,
       page_ready: analysis?.is_grading_page ?? false,
+      auto_watch: cfg.safety.autoWatch,
       calibration: (() => {
         if (!cfg.calibration.enabled) return null;
         const stats = this.deps.calibrationStore.statsFor(cfg.rubric.id, cfg.calibration.window);

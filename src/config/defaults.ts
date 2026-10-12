@@ -115,6 +115,7 @@ export function defaultConfig(): AppConfig {
       checkAutoSubmitFirst: true,
       maxRegionFraction: 0.75,
       expectedQuestionNumber: null,
+      autoWatch: false,
     },
     ocr: { enabled: false, engine: 'tesseract', lang: 'eng' },
     capture: { maxDimension: 2048, grayscale: true, contrastBoost: 1.35, sharpen: true },

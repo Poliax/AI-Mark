@@ -33,6 +33,7 @@ const safety: SafetyConfig = {
   checkAutoSubmitFirst: true,
   maxRegionFraction: 0.75,
   expectedQuestionNumber: null,
+  autoWatch: false,
 };
 
 describe('validateScore（§8 安全机制）', () => {

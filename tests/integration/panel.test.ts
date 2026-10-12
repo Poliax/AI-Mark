@@ -47,6 +47,7 @@ describe('ControlServer + 悬浮面板', () => {
       teacher_score: null,
       student_kaohao: null,
       page_ready: true,
+      auto_watch: false,
       calibration: { enabled: true, sample_count: 12, avg_deviation: 0.5, min_samples: 10 },
       target: { url: page.url(), title: '', student_identity: '考生：王小明　考号：20260001' },
       last_record_id: '0003',
@@ -73,6 +74,9 @@ describe('ControlServer + 悬浮面板', () => {
         getCalibration: () => ({ enabled: true, sample_count: 12, avg_deviation: 0.5, min_samples: 10 }),
         resetCalibration: () => {
           commands.push('calibration_reset');
+        },
+        setAutoWatch: (enabled) => {
+          commands.push(enabled ? 'auto_watch_on' : 'auto_watch_off');
         },
         onCommand: (c) => commands.push(c),
         getRecordImage: () => null,

@@ -51,6 +51,7 @@ export const PANEL_PAGE_HTML = `<!doctype html>
       <div class="kv"><span>本页考试</span><b id="exam" style="font-size:12px">-</b></div>
       <div class="kv"><span>平台进度</span><b id="prog">-</b></div>
       <div class="kv"><span>状态</span><b id="st">-</b></div>
+      <div class="kv"><span>自动监听</span><b id="watch" style="font-size:12px">-</b></div>
       <div class="kv"><span>当前</span><b id="cur">-</b></div>
       <div class="kv"><span>AI评分</span><b id="score">-</b></div>
       <div class="kv"><span>置信度</span><b id="conf">-</b></div>
@@ -65,6 +66,7 @@ export const PANEL_PAGE_HTML = `<!doctype html>
       <button id="b-manual">人工评分</button>
       <button id="b-reid">重新识别</button>
       <button id="b-regrade">重新评分</button>
+      <button id="b-watch">自动监听</button>
       <button id="b-skip">跳过</button>
       <button class="danger" id="b-stop">停止</button>
     </div>
@@ -168,6 +170,17 @@ $('b-cont').onclick = () => cmd('continue');
 $('b-manual').onclick = () => cmd('manual_grade');
 $('b-reid').onclick = () => cmd('reidentify');
 $('b-regrade').onclick = () => cmd('regrade');
+let autoWatch = false;
+const watchBtn = $('b-watch');
+const paintWatch = (on) => {
+  autoWatch = on;
+  if (!watchBtn) return;
+  watchBtn.textContent = on ? '自动监听：开 ✓' : '自动监听：关';
+  watchBtn.style.background = on ? '#166534' : '';
+  watchBtn.style.color = on ? '#fff' : '';
+  watchBtn.style.borderColor = on ? '#166534' : '';
+};
+if (watchBtn) watchBtn.onclick = () => post('/api/auto-watch', { enabled: !autoWatch });
 $('b-skip').onclick = () => cmd('skip');
 $('b-stop').onclick = () => cmd('stop');
 $('rsave').onclick = () => post('/api/rubric', {

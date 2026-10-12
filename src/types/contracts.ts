@@ -236,6 +236,8 @@ export interface AgentStatus {
   student_kaohao: string | null;
   /** 当前绑定页是否为可批改的阅卷页（供面板提示） */
   page_ready: boolean;
+  /** 自动监听模式（无需教师点工具按钮，页面换学生即自动批改并高亮） */
+  auto_watch: boolean;
   /** 校准（学习教师尺度）状态 */
   calibration: { enabled: boolean; sample_count: number; avg_deviation: number; min_samples: number } | null;
   target: { url: string; title: string; student_identity: string | null };

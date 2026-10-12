@@ -111,6 +111,15 @@ export function saveAiToLocal(cwd: string, ai: AppConfig['ai']): string {
   return file;
 }
 
+/** 将更新后的安全/模式设置写回 config.local.json（面板切换开关时持久化） */
+export function saveSafetyToLocal(cwd: string, safety: AppConfig['safety']): string {
+  const file = path.join(cwd, 'config.local.json');
+  const existing = existsSync(file) ? JSON.parse(readFileSync(file, 'utf-8')) : {};
+  existing.safety = safety;
+  writeFileSync(file, JSON.stringify(existing, null, 2), 'utf-8');
+  return file;
+}
+
 /** 生成示例配置文件（不含 ai 段：让 .env 控制模型与 Key；面板保存时会自动写入 ai 段） */
 export function writeExampleConfig(cwd: string, overwrite = false): string {
   const file = path.join(cwd, 'config.local.json');
