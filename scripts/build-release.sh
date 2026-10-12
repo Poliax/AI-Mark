@@ -84,7 +84,7 @@ cat > "build/release/essay-agent-mac/README.txt" <<'EOF'
 2. 等待 1-2 分钟自动安装，桌面出现「启动阅卷助手」应用（.app，双击即用，无终端窗口）；
 3. 双击「启动阅卷助手」→ 专用 Chrome 打开好分数 → 登录后进入阅卷页；
 4. 悬浮面板里「大模型设置」→ 粘贴自己的智谱 API Key（免费注册：open.bigmodel.cn）→ 保存；
-5. 填评分标准 → 点「开始」。默认 DRY RUN：只高亮建议分数，绝不点击。
+5. 填评分标准 → 点「开始」。默认 DRY RUN：只高亮建议分数，绝不点击。\n\n若启动失败：桌面会弹出提示框，日志在桌面 essay-agent-log.txt（把它发给老师即可定位问题）。
 EOF
 
 echo "▶ 组装 Windows 发布包…"

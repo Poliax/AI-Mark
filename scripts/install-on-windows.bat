@@ -50,7 +50,7 @@ echo Creating desktop shortcut ...
 if not exist "%DESKTOP%" mkdir "%DESKTOP%"
 rem Proper Windows shortcut (.lnk) running minimized: no black console window
 rem Shortcut display names are built from Unicode code points so this file stays pure ASCII
-powershell -NoProfile -Command "$cs=0x542F,0x52A8,0x9605,0x5377,0x52A9,0x624B; $n=($cs | ForEach-Object {[char]$_}) -join ''; $ws=New-Object -ComObject WScript.Shell; $l=$ws.CreateShortcut((Join-Path '%DESKTOP%' ($n + '.lnk'))); $l.TargetPath='%~dp0scripts\start-grading-windows.bat'; $l.WorkingDirectory='%~dp0scripts'; $l.WindowStyle=7; $l.IconLocation='%SystemRoot%\System32\shell32.dll,137'; $l.Description='AI Essay Grading Assistant'; $l.Save()" >nul 2>nul
+powershell -NoProfile -Command "$cs=0x542F,0x52A8,0x9605,0x5377,0x52A9,0x624B; $n=($cs | ForEach-Object {[char]$_}) -join ''; $ws=New-Object -ComObject WScript.Shell; $l=$ws.CreateShortcut((Join-Path '%DESKTOP%' ($n + '.lnk'))); $l.TargetPath='%PROJ%\scripts\start-grading-windows.bat'; $l.WorkingDirectory='%PROJ%\scripts'; $l.WindowStyle=7; $l.IconLocation='%SystemRoot%\System32\shell32.dll,137'; $l.Description='AI Essay Grading Assistant'; $l.Save()" >nul 2>nul
 echo [OK] desktop shortcut created >> "%LOG%"
 
 rem Keep a launcher copy next to install.bat as well
