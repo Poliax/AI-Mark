@@ -42,13 +42,18 @@ if [ -z "$BROWSER" ]; then
   exit 1
 fi
 
-# 2. 专用浏览器未运行则启动（已运行则复用）
+# 2. 专用浏览器未运行则启动；已运行则复用，并顺便打开好分数页面
+#    固定 profile 目录：沿用教师已登录的状态，无需重复登录
+PROFILE="$HOME/essay-agent-chrome"
 if ! curl -s --max-time 2 "http://127.0.0.1:$PORT/json/version" >/dev/null 2>&1; then
   echo "启动专用浏览器: $BROWSER"
   "$BROWSER" --remote-debugging-port=$PORT \
-    --user-data-dir="$HOME/essay-agent-browser" \
+    --user-data-dir="$PROFILE" \
     "https://yue.haofenshu.com/" >/dev/null 2>&1 &
   sleep 3
+else
+  # 已运行：用同一 profile 再开一个窗口打开好分数（沿用同一调试端口，不会新起进程）
+  "$BROWSER" --user-data-dir="$PROFILE" "https://yue.haofenshu.com/" >/dev/null 2>&1 &
 fi
 
 # 3. 等待出现平台页面（最多 60 秒，出现即继续）
