@@ -101,6 +101,16 @@ cat > "build/release/essay-agent-windows/README.txt" <<'EOF'
 5. 填评分标准 → 点「开始」。默认 DRY RUN：只高亮建议分数，绝不点击。
 EOF
 
+# 说明文件加 UTF-8 BOM（Windows 记事本正确显示中文）
+python3 - <<'PY'
+import io, os
+for f in ['build/release/essay-agent-mac/README.txt', 'build/release/essay-agent-windows/README.txt']:
+    if os.path.exists(f):
+        data = open(f, 'rb').read()
+        if not data.startswith(b'\xef\xbb\xbf'):
+            open(f, 'wb').write(b'\xef\xbb\xbf' + data)
+PY
+
 echo "▶ 打包 zip…"
 cd build/release
 rm -f essay-agent-mac.zip essay-agent-windows.zip
